@@ -5,7 +5,7 @@ import tensorflow as tf
 from PIL import Image
 import numpy as np
 
-BUCKET = "boom155" ##google cloud name
+BUCKET = "boom155" ##google cloud bucket name
 CLASS_NAMES = ["Early Blight","Late Blight","Healthy"]
 
 model = None
@@ -16,6 +16,7 @@ def download_blob(bucket_name,source_blob_name,destination_file_name):
     blob = bucket.blob(source_blob_name)
     blob.download_to_filename(destination_file_name)
 
+## predict function uploaded on the cloud which will be called everytime when someone uses the application
 def predict(request):
     global model
     if model is None:
@@ -27,6 +28,8 @@ def predict(request):
         model = tf.keras.models.load_model("/tmp/mymodel_for_mobile.h5")
 
     image = request.files["file"]
+    
+    ## To resize every image file sent by the user/client to 256*256 dimensions
     image = np.array(Image.open(image).convert("RGB").resize((256,256)))
     img_array = tf.expand_dims(image,0)
     print(img_array)

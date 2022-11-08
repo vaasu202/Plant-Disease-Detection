@@ -44,7 +44,8 @@ class _MyHomePageState extends State<MyHomePage> {
   Uint8List? _imagebytes;
 
   final picker = ImagePicker();
-
+  
+  //Funtion to get the image from the user from the camera only. Gallery option is not given on purpose. The person using the code can enable it.
   void _getimage() async{
     final pickedfile = await picker.getImage(source: ImageSource.camera);
     setState(() {
@@ -57,7 +58,9 @@ class _MyHomePageState extends State<MyHomePage> {
       }
     });
   }
-
+  
+  //Function to upload the image to the google cloud server(the link given below which passes the image as an argument to the cloud function) and get a response.
+  //Function also receives the response and navigates towards a new screen if and only if there is some valid response from the server.
   _uploadfile(File file) async{
     var request = http.MultipartRequest('POST', Uri.parse("https://asia-south1-cryptic-gate-366707.cloudfunctions.net/predict"));
     request.files.add(await http.MultipartFile.fromPath("file",file.path));
